@@ -130,7 +130,7 @@ a { color:inherit; text-decoration:none }
   .nb-hide  { display:none }
 }
 
-/* ── HERO BANNER ──────────────────────────────────────────────────────────── */
+/* ── HERO BANNER (carrossel) ─────────────────────────────────────────────── */
 .hero-banner {
   position: relative;
   height: min(78vh, 640px);
@@ -138,7 +138,14 @@ a { color:inherit; text-decoration:none }
   overflow: hidden;
   background: var(--dark);
 }
-.hero-banner img {
+.hero-slides { position:absolute; inset:0 }
+.hero-slide {
+  position:absolute; inset:0;
+  opacity:0; transition: opacity .9s ease;
+  pointer-events:none;
+}
+.hero-slide.on { opacity:1; pointer-events:auto }
+.hero-slide img {
   width: 100%; height: 100%;
   object-fit: cover; object-position: top center;
   display: block;
@@ -148,6 +155,7 @@ a { color:inherit; text-decoration:none }
   content:'';
   position:absolute; inset:0;
   background: linear-gradient(90deg, rgba(10,5,0,.55) 0%, rgba(10,5,0,.1) 55%, transparent 80%);
+  z-index:1; pointer-events:none;
 }
 .hero-copy {
   position: absolute; left: 0; right: 0; bottom: 0;
@@ -170,6 +178,53 @@ a { color:inherit; text-decoration:none }
 }
 .hero-tags { display:flex; gap:.9rem; font-size:11px; letter-spacing:.14em; text-transform:uppercase; opacity:.85 }
 .hero-tags .sep { opacity:.4 }
+
+.hero-nav {
+  position:absolute; z-index:3;
+  right: var(--gxr); bottom: 3.5rem;
+  display:flex; align-items:center; gap:14px;
+}
+.hero-dots { display:flex; gap:7px }
+.hero-dot {
+  width:7px; height:7px; border-radius:50%;
+  background:rgba(255,255,255,.35); border:none; cursor:pointer;
+  padding:0; transition:background .2s, width .2s;
+}
+.hero-dot.on { background:#fff; width:22px; border-radius:4px }
+.hero-arrows { display:flex; gap:6px }
+.hero-arr {
+  width:36px; height:36px;
+  border:1px solid rgba(255,255,255,.35); background:rgba(0,0,0,.15);
+  color:#fff; font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition: background .15s, border-color .15s;
+}
+.hero-arr:hover { background:rgba(255,255,255,.15); border-color:#fff }
+@media (max-width:700px) { .hero-nav { bottom:1.5rem; right:var(--gx) } .hero-arrows { display:none } }
+
+/* ── COLEÇÃO BANNER (carrossel secundário) ───────────────────────────────── */
+.coll-banner {
+  position: relative;
+  height: min(48vh, 400px);
+  min-height: 280px;
+  overflow: hidden;
+  background: var(--dark);
+}
+.coll-banner .hero-slide img { object-position: center 20% }
+.coll-banner::after {
+  content:'';
+  position:absolute; inset:0;
+  background: linear-gradient(0deg, rgba(10,5,0,.6) 0%, rgba(10,5,0,.1) 45%, transparent 75%);
+  z-index:1; pointer-events:none;
+}
+.coll-copy {
+  position:absolute; left:0; right:0; bottom:0;
+  max-width:var(--w); margin:0 auto;
+  padding: 0 var(--gx) 2rem;
+  color:#fff; z-index:2;
+}
+.coll-eyebrow { font-size:10px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold-lt); margin-bottom:.5rem; font-weight:600 }
+.coll-copy h2 { font-family:var(--f-disp); font-size:clamp(26px,3.6vw,44px); font-weight:300; letter-spacing:.03em }
 
 /* ── PRODUCT SECTION (carousel, Stefano-style) ───────────────────────────── */
 .psection { max-width:var(--w); margin:0 auto; padding:3.5rem var(--gx) }
@@ -486,9 +541,19 @@ a { color:inherit; text-decoration:none }
   </div>
 </header>
 
-<!-- ── HERO BANNER ── -->
+<!-- ── HERO BANNER (carrossel) ── -->
 <section class="hero-banner">
-  <img src="img/261228-1920-2627.webp" alt="Coleção UseMacedo">
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide on">
+      <img src="img/261228-1920-2627.webp" alt="Paletó UseMacedo">
+    </div>
+    <div class="hero-slide">
+      <img src="img/18121608_09_1-CALCA-SLIM-ALFAIATARIA-MLT.webp" alt="Alfaiataria UseMacedo">
+    </div>
+    <div class="hero-slide">
+      <img src="img/calca-de-alfaiataria-masculina_600x600.webp" alt="Calça UseMacedo">
+    </div>
+  </div>
   <div class="hero-copy">
     <div class="hero-eyebrow">Coleção Atual</div>
     <h1>Alfaiataria<br>Essencial</h1>
@@ -496,6 +561,13 @@ a { color:inherit; text-decoration:none }
       <span>Precisão</span><span class="sep">·</span>
       <span>Caimento</span><span class="sep">·</span>
       <span>Tradição</span>
+    </div>
+  </div>
+  <div class="hero-nav">
+    <div class="hero-dots" id="heroDots"></div>
+    <div class="hero-arrows">
+      <button class="hero-arr" id="heroPrev" aria-label="Anterior">‹</button>
+      <button class="hero-arr" id="heroNext" aria-label="Próximo">›</button>
     </div>
   </div>
 </section>
@@ -511,6 +583,22 @@ a { color:inherit; text-decoration:none }
   </div>
   <div class="pviewport">
     <div class="ptrack" id="grid1"></div>
+  </div>
+</section>
+
+<!-- ── COLEÇÃO BANNER (carrossel) ── -->
+<section class="coll-banner">
+  <div class="hero-slides" id="collSlides">
+    <div class="hero-slide on">
+      <img src="img/444235-1920-2627.webp" alt="Coleção UseMacedo">
+    </div>
+    <div class="hero-slide">
+      <img src="img/6100iolfRIL.webp" alt="Coleção UseMacedo">
+    </div>
+  </div>
+  <div class="coll-copy">
+    <div class="coll-eyebrow">A Nova Era já Começou</div>
+    <h2>Coleção UseMacedo</h2>
   </div>
 </section>
 
@@ -750,6 +838,41 @@ a { color:inherit; text-decoration:none }
   }
   initProductCarousel('grid1', 'p1Prev', 'p1Next');
   initProductCarousel('grid2', 'p2Prev', 'p2Next');
+
+  /* ── hero / coleção image carousels ── */
+  function initImgCarousel(opts) {
+    const wrap  = document.getElementById(opts.slidesId);
+    const slides = wrap.querySelectorAll('.hero-slide');
+    const dotsEl = opts.dotsId ? document.getElementById(opts.dotsId) : null;
+    const prev   = opts.prevId ? document.getElementById(opts.prevId) : null;
+    const next   = opts.nextId ? document.getElementById(opts.nextId) : null;
+    let cur = 0;
+
+    function go(i) {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach((s, idx) => s.classList.toggle('on', idx === cur));
+      if (dotsEl) dotsEl.querySelectorAll('.hero-dot').forEach((d, idx) => d.classList.toggle('on', idx === cur));
+    }
+    if (dotsEl) {
+      dotsEl.innerHTML = '';
+      slides.forEach((_, i) => {
+        const d = document.createElement('button');
+        d.className = 'hero-dot' + (i === 0 ? ' on' : '');
+        d.setAttribute('aria-label', 'Slide ' + (i + 1));
+        d.addEventListener('click', () => { go(i); resetAuto(); });
+        dotsEl.appendChild(d);
+      });
+    }
+    if (prev) prev.addEventListener('click', () => { go(cur - 1); resetAuto(); });
+    if (next) next.addEventListener('click', () => { go(cur + 1); resetAuto(); });
+
+    let timer;
+    function startAuto() { timer = setInterval(() => go(cur + 1), opts.interval || 5500); }
+    function resetAuto() { clearInterval(timer); startAuto(); }
+    if (slides.length > 1) startAuto();
+  }
+  initImgCarousel({ slidesId:'heroSlides', dotsId:'heroDots', prevId:'heroPrev', nextId:'heroNext', interval:5500 });
+  initImgCarousel({ slidesId:'collSlides', interval:4500 });
 
   /* ── content carousel ── */
   (function () {
