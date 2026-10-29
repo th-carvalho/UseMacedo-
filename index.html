@@ -382,6 +382,29 @@ a { color:inherit; text-decoration:none }
 
 .qv-desc { font-size:12.5px; color:var(--fg-mid); line-height:1.8; border-top:1px solid var(--border); padding-top:1.2rem }
 
+.qv-frete { border-top:1px solid var(--border); padding-top:1.2rem; display:flex; flex-direction:column; gap:.6rem }
+.qv-frete-row { display:flex; gap:8px }
+.qv-cep-input {
+  flex:1; min-width:0;
+  padding:11px 13px;
+  border:1px solid var(--border); background:none;
+  font-family:var(--f-ui); font-size:12.5px; color:var(--fg);
+  letter-spacing:.02em;
+}
+.qv-cep-input:focus { outline:none; border-color:var(--fg) }
+.qv-cep-btn {
+  padding:11px 16px;
+  background:none; border:1px solid var(--fg); color:var(--fg);
+  font-family:var(--f-ui); font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  cursor:pointer; white-space:nowrap;
+  transition:background .15s,color .15s;
+}
+.qv-cep-btn:hover:not(:disabled) { background:var(--fg); color:var(--bg) }
+.qv-cep-btn:disabled { opacity:.5; cursor:default }
+.qv-frete-result { font-size:12.5px; color:var(--fg-mid); min-height:1.2em }
+.qv-frete-result.ok strong { color:var(--fg) }
+.qv-frete-result.err { color:#c0392b }
+
 /* ── CONTENT CAROUSEL ─────────────────────────────────────────────────────── */
 .content-strip {
   border-top: 1px solid var(--border);
@@ -795,6 +818,16 @@ a { color:inherit; text-decoration:none }
         <span class="qv-hint" id="qvHint"></span>
       </div>
       <button class="qv-addbtn" id="qvAddBtn" type="button">Adicionar à Sacola</button>
+
+      <div class="qv-frete">
+        <span class="qv-label">Calcular Frete</span>
+        <div class="qv-frete-row">
+          <input class="qv-cep-input" id="qvCep" type="text" inputmode="numeric" maxlength="9" placeholder="Digite seu CEP">
+          <button class="qv-cep-btn" id="qvCepBtn" type="button">Calcular</button>
+        </div>
+        <div class="qv-frete-result" id="qvFreteResult"></div>
+      </div>
+
       <p class="qv-desc">Peça de alfaiataria UseMacedo com caimento preciso e tecido premium. Frete grátis acima de R$ 399 e 10% OFF no Pix.</p>
     </div>
   </div>
@@ -934,10 +967,15 @@ a { color:inherit; text-decoration:none }
     const sizesEl  = document.getElementById('qvSizes');
     const hintEl   = document.getElementById('qvHint');
     const addBtn   = document.getElementById('qvAddBtn');
+    const cepInput = document.getElementById('qvCep');
+    const cepBtn   = document.getElementById('qvCepBtn');
+    const freteRes = document.getElementById('qvFreteResult');
 
     let selectedSize = null;
+    let currentProduct = null;
 
     function open(product) {
+      currentProduct = product;
       imgEl.src = product.img;
       imgEl.alt = product.name;
       if (product.tag) { badgeEl.textContent = product.tag; badgeEl.hidden = false; }
@@ -953,6 +991,9 @@ a { color:inherit; text-decoration:none }
       hintEl.textContent = 'Selecione um tamanho';
       addBtn.textContent = 'Adicionar à Sacola';
       addBtn.disabled = false;
+      cepInput.value = '';
+      freteRes.textContent = '';
+      freteRes.className = 'qv-frete-result';
 
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
@@ -975,6 +1016,47 @@ a { color:inherit; text-decoration:none }
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger(); }
       });
     });
+
+    cepInput.addEventListener('input', () => {
+      let v = cepInput.value.replace(/\D/g, '').slice(0, 8);
+      if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
+      cepInput.value = v;
+    });
+
+    async function calcularFrete() {
+      const cep = cepInput.value.replace(/\D/g, '');
+      if (cep.length !== 8) {
+        freteRes.textContent = 'Digite um CEP válido (8 dígitos).';
+        freteRes.className = 'qv-frete-result err';
+        return;
+      }
+      cepBtn.disabled = true;
+      cepBtn.textContent = '...';
+      freteRes.textContent = '';
+      freteRes.className = 'qv-frete-result';
+      try {
+        const subtotal = currentProduct ? parseFloat(currentProduct.price.replace('R$ ', '').replace(/\./g, '').replace(',', '.')) : 0;
+        const r = await fetch('/api/frete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ cep, totalItens: 1, subtotal }),
+        });
+        const data = await r.json();
+        if (!r.ok || !data.opcoes || !data.opcoes.length) throw new Error(data.erro || 'Não foi possível calcular o frete.');
+        const op = data.opcoes[0];
+        const valorTxt = op.gratis || op.preco === 0 ? 'Grátis' : `R$ ${op.preco.toFixed(2).replace('.', ',')}`;
+        freteRes.innerHTML = `<strong>${valorTxt}</strong> via ${op.empresa ? op.empresa + ' ' : ''}${op.nome || 'Correios'}${op.prazo ? ` — até ${op.prazo} dias úteis` : ''}`;
+        freteRes.className = 'qv-frete-result ok';
+      } catch (err) {
+        freteRes.textContent = err.message || 'Erro ao calcular o frete.';
+        freteRes.className = 'qv-frete-result err';
+      } finally {
+        cepBtn.disabled = false;
+        cepBtn.textContent = 'Calcular';
+      }
+    }
+    cepBtn.addEventListener('click', calcularFrete);
+    cepInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); calcularFrete(); } });
 
     sizesEl.addEventListener('click', (e) => {
       const btn = e.target.closest('.qv-size');
