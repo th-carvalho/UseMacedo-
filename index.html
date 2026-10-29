@@ -34,22 +34,9 @@
   --w:   1300px;
   --gx:  max(24px, env(safe-area-inset-left,  0px));
   --gxr: max(24px, env(safe-area-inset-right, 0px));
-}
 
-/* dark mode keeps the same premium identity */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg:#16110c; --fg:#ede8e0; --fg-mid:#a39888; --fg-soft:#6a6054;
-    --border:#2e271c; --surface:#1f1912;
-    --chip:rgba(22,17,12,.9);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg:#16110c; --fg:#ede8e0; --fg-mid:#a39888; --fg-soft:#6a6054;
-  --border:#2e271c; --surface:#1f1912;
-  --chip:rgba(22,17,12,.9);
-  color-scheme: dark;
+  /* site sempre claro — identidade de marca fixa, sem alternância automática */
+  color-scheme: light;
 }
 
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
