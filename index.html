@@ -298,6 +298,90 @@ a { color:inherit; text-decoration:none }
 .price-now { font-size:14px; font-weight:500; color:var(--fg); font-variant-numeric:tabular-nums }
 .pcard-parcela { font-size:11px; color:var(--fg-mid) }
 
+/* ── QUICK VIEW MODAL ─────────────────────────────────────────────────────── */
+.qv-overlay {
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(10,6,2,.55);
+  display:flex; align-items:center; justify-content:center;
+  padding:20px;
+  opacity:0; pointer-events:none;
+  transition:opacity .25s ease;
+}
+.qv-overlay.open { opacity:1; pointer-events:auto }
+.qv-modal {
+  background:var(--bg);
+  width:100%; max-width:880px; max-height:88vh;
+  display:grid; grid-template-columns:1fr 1fr;
+  overflow:hidden; position:relative;
+  transform:translateY(16px) scale(.98);
+  transition:transform .3s cubic-bezier(.2,.8,.3,1);
+  box-shadow:0 30px 80px rgba(0,0,0,.35);
+}
+.qv-overlay.open .qv-modal { transform:translateY(0) scale(1) }
+@media (max-width:700px) {
+  .qv-modal { grid-template-columns:1fr; max-height:92vh; overflow-y:auto }
+}
+
+.qv-close {
+  position:absolute; top:14px; right:14px; z-index:3;
+  width:34px; height:34px; border:none; border-radius:50%;
+  background:rgba(255,255,255,.9); color:var(--fg);
+  font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .15s;
+}
+.qv-close:hover { background:#fff }
+
+.qv-photo { position:relative; background:var(--surface); overflow:hidden }
+.qv-photo img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block }
+.qv-badge {
+  position:absolute; top:14px; left:14px;
+  background:var(--gold); color:#fff;
+  font-size:9px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+  padding:4px 10px;
+}
+@media (max-width:700px) { .qv-photo { aspect-ratio:3/4 } }
+
+.qv-info {
+  padding:2.5rem 2.25rem;
+  display:flex; flex-direction:column; gap:1.4rem;
+  overflow-y:auto;
+}
+.qv-name {
+  font-family:var(--f-disp); font-size:clamp(20px,2.4vw,27px);
+  font-weight:400; line-height:1.25; letter-spacing:.01em;
+  padding-right:1.5rem;
+}
+.qv-prices { display:flex; align-items:baseline; gap:10px }
+.qv-price-old { font-size:13px; color:var(--fg-soft); text-decoration:line-through }
+.qv-price-now { font-size:22px; font-weight:500; color:var(--fg); font-variant-numeric:tabular-nums }
+.qv-parcela { font-size:12.5px; color:var(--fg-mid) }
+
+.qv-block { display:flex; flex-direction:column; gap:.7rem }
+.qv-label { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--fg-mid); font-weight:600 }
+.qv-sizes { display:flex; gap:8px; flex-wrap:wrap }
+.qv-size {
+  min-width:42px; height:42px; padding:0 12px;
+  border:1px solid var(--border); background:none;
+  font-family:var(--f-ui); font-size:12.5px; color:var(--fg);
+  cursor:pointer; transition:border-color .15s,background .15s,color .15s;
+}
+.qv-size:hover { border-color:var(--fg) }
+.qv-size.sel { background:var(--fg); color:var(--bg); border-color:var(--fg) }
+
+.qv-addbtn {
+  margin-top:.3rem; padding:16px;
+  background:var(--fg); color:var(--bg);
+  border:none; font-family:var(--f-ui);
+  font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+  cursor:pointer; transition:background .15s;
+}
+.qv-addbtn:hover { background:var(--gold) }
+.qv-addbtn:disabled { opacity:.4; cursor:default }
+.qv-hint { font-size:11px; color:var(--fg-soft) }
+
+.qv-desc { font-size:12.5px; color:var(--fg-mid); line-height:1.8; border-top:1px solid var(--border); padding-top:1.2rem }
+
 /* ── CONTENT CAROUSEL ─────────────────────────────────────────────────────── */
 .content-strip {
   border-top: 1px solid var(--border);
@@ -688,6 +772,34 @@ a { color:inherit; text-decoration:none }
   </div>
 </section>
 
+<!-- ── QUICK VIEW MODAL ── -->
+<div class="qv-overlay" id="qvOverlay" aria-hidden="true">
+  <div class="qv-modal" role="dialog" aria-modal="true" aria-labelledby="qvName">
+    <button class="qv-close" id="qvClose" aria-label="Fechar">&times;</button>
+    <div class="qv-photo">
+      <img id="qvImg" src="" alt="">
+      <span class="qv-badge" id="qvBadge" hidden></span>
+    </div>
+    <div class="qv-info">
+      <div class="qv-name" id="qvName"></div>
+      <div>
+        <div class="qv-prices">
+          <span class="qv-price-old" id="qvOld" hidden></span>
+          <span class="qv-price-now" id="qvPrice"></span>
+        </div>
+        <div class="qv-parcela" id="qvParcela"></div>
+      </div>
+      <div class="qv-block">
+        <span class="qv-label">Tamanho</span>
+        <div class="qv-sizes" id="qvSizes"></div>
+        <span class="qv-hint" id="qvHint"></span>
+      </div>
+      <button class="qv-addbtn" id="qvAddBtn" type="button">Adicionar à Sacola</button>
+      <p class="qv-desc">Peça de alfaiataria UseMacedo com caimento preciso e tecido premium. Frete grátis acima de R$ 399 e 10% OFF no Pix.</p>
+    </div>
+  </div>
+</div>
+
 <!-- ── FOOTER ── -->
 <footer class="site-footer">
   <div class="footer-top">
@@ -784,9 +896,9 @@ a { color:inherit; text-decoration:none }
     return `10x de R$&nbsp;${x10} sem juros`;
   }
 
-  function cardHTML(p) {
+  function cardHTML(p, idx) {
     return `
-    <article class="pcard" tabindex="0" aria-label="${p.name}">
+    <article class="pcard" tabindex="0" role="button" data-idx="${idx}" aria-label="Ver ${p.name}">
       <div class="pcard-photo">
         <div class="pcard-inner">
           <img class="pcard-img" src="${p.img}" alt="${p.name}" loading="lazy">
@@ -805,8 +917,91 @@ a { color:inherit; text-decoration:none }
   }
 
   const half = Math.ceil(products.length / 2);
-  document.getElementById('grid1').innerHTML = products.slice(0, half).map(cardHTML).join('');
-  document.getElementById('grid2').innerHTML = products.slice(half).map(cardHTML).join('');
+  document.getElementById('grid1').innerHTML = products.slice(0, half).map((p, i) => cardHTML(p, i)).join('');
+  document.getElementById('grid2').innerHTML = products.slice(half).map((p, i) => cardHTML(p, i + half)).join('');
+
+  /* ── quick view modal ── */
+  (function () {
+    const SIZES = ['P', 'M', 'G', 'GG'];
+    const overlay  = document.getElementById('qvOverlay');
+    const closeBtn = document.getElementById('qvClose');
+    const imgEl    = document.getElementById('qvImg');
+    const badgeEl  = document.getElementById('qvBadge');
+    const nameEl   = document.getElementById('qvName');
+    const oldEl    = document.getElementById('qvOld');
+    const priceEl  = document.getElementById('qvPrice');
+    const parcelaEl= document.getElementById('qvParcela');
+    const sizesEl  = document.getElementById('qvSizes');
+    const hintEl   = document.getElementById('qvHint');
+    const addBtn   = document.getElementById('qvAddBtn');
+
+    let selectedSize = null;
+
+    function open(product) {
+      imgEl.src = product.img;
+      imgEl.alt = product.name;
+      if (product.tag) { badgeEl.textContent = product.tag; badgeEl.hidden = false; }
+      else { badgeEl.hidden = true; }
+      nameEl.textContent = product.name;
+      if (product.old) { oldEl.textContent = product.old; oldEl.hidden = false; }
+      else { oldEl.hidden = true; }
+      priceEl.textContent = product.price;
+      parcelaEl.innerHTML = parcela(product.price);
+
+      selectedSize = null;
+      sizesEl.innerHTML = SIZES.map(s => `<button type="button" class="qv-size" data-size="${s}">${s}</button>`).join('');
+      hintEl.textContent = 'Selecione um tamanho';
+      addBtn.textContent = 'Adicionar à Sacola';
+      addBtn.disabled = false;
+
+      overlay.classList.add('open');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function close() {
+      overlay.classList.remove('open');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.pcard').forEach(card => {
+      function trigger() {
+        const idx = parseInt(card.dataset.idx, 10);
+        open(products[idx]);
+      }
+      card.addEventListener('click', trigger);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigger(); }
+      });
+    });
+
+    sizesEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.qv-size');
+      if (!btn) return;
+      selectedSize = btn.dataset.size;
+      sizesEl.querySelectorAll('.qv-size').forEach(b => b.classList.toggle('sel', b === btn));
+      hintEl.textContent = `Tamanho ${selectedSize} selecionado`;
+    });
+
+    addBtn.addEventListener('click', () => {
+      if (!selectedSize) {
+        hintEl.textContent = 'Selecione um tamanho antes de continuar';
+        hintEl.style.color = '#c0392b';
+        return;
+      }
+      hintEl.style.color = '';
+      addBtn.textContent = 'Adicionado ✓';
+      addBtn.disabled = true;
+      const cartCount = document.querySelector('.cart-count');
+      if (cartCount) cartCount.textContent = String(parseInt(cartCount.textContent, 10) + 1);
+      setTimeout(close, 900);
+    });
+
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) close(); });
+  })();
 
   /* ── product carousel controls ── */
   function initProductCarousel(trackId, prevId, nextId) {
