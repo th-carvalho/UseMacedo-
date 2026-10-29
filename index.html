@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Alfaiataria masculina UseMacedo — ternos, costumes, paletós e calças sociais com caimento preciso e tecidos premium.">
+<title>Alfaiataria Masculina — UseMacedo</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ── TOKENS ───────────────────────────────────────────────────────────────── */
+/* Layout: luxury fashion catalog — dark crown header, warm-white body, editorial grid */
+:root {
+  --bg:       #fafaf8;
+  --fg:       #1a0f05;
+  --fg-mid:   #6a5a48;
+  --fg-soft:  #a89880;
+  --border:   #e8e0d4;
+  --surface:  #f2ede4;
+  --gold:     #c9963a;
+  --gold-lt:  #e0b55a;
+  --dark:     #160900;
+  --dark-2:   #1f0e04;
+  --dark-fg:  #ede8e0;
+  --dark-sub: rgba(237,232,224,.55);
+  --chip:     rgba(252,250,246,.9);
+
+  --f-disp: 'Cormorant Garamond', Georgia, serif;
+  --f-ui:   'Inter', system-ui, sans-serif;
+
+  --w:   1300px;
+  --gx:  max(24px, env(safe-area-inset-left,  0px));
+  --gxr: max(24px, env(safe-area-inset-right, 0px));
+}
+
+/* dark mode keeps the same warm-premium identity */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#1a0f05; --fg:#ede8e0; --fg-mid:#907060; --fg-soft:#5a4030;
+    --border:#2e1c0a; --surface:#221408;
+    --chip:rgba(34,20,8,.9);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#1a0f05; --fg:#ede8e0; --fg-mid:#907060; --fg-soft:#5a4030;
+  --border:#2e1c0a; --surface:#221408;
+  --chip:rgba(34,20,8,.9);
+  color-scheme: dark;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0 }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-ui);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { color:inherit; text-decoration:none }
+
+/* ── TOP STRIP ────────────────────────────────────────────────────────────── */
+.top-strip {
+  background: var(--dark);
+  color: var(--dark-fg);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 9px var(--gx);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+.ts-promo { display:flex; align-items:center; gap:.9rem; flex-wrap:wrap }
+.ts-promo .gold { color: var(--gold); font-weight:600 }
+.ts-promo .sep  { opacity:.25 }
+.ts-links { display:flex; gap:1.25rem; flex-shrink:0 }
+.ts-links a { opacity:.5; transition:opacity .15s }
+.ts-links a:hover { opacity:1 }
+@media (max-width:680px) { .ts-links { display:none } .top-strip { justify-content:center } }
+
+/* ── HEADER ───────────────────────────────────────────────────────────────── */
+.header-wrap {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 300;
+  background: var(--dark);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.header-inner {
+  max-width: var(--w);
+  margin: 0 auto;
+  padding: 0 var(--gx);
+  height: 66px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-main { display:flex; gap:.25rem }
+.nav-main a {
+  font-size: 11px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--dark-sub);
+  padding: 8px 12px;
+  transition: color .15s;
+}
+.nav-main a:hover,
+.nav-main a.active { color: var(--dark-fg) }
+.nav-main a.active { border-bottom: 1px solid var(--gold); color: var(--gold) }
+
+.brand-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+.brand-logo img {
+  height: 42px;
+  width:  42px;
+  object-fit: cover;
+}
+.brand-name {
+  font-family: var(--f-disp);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding-left: .28em;
+  line-height: 1;
+}
+
+.nav-actions { display:flex; gap:.5rem; align-items:center; justify-content:flex-end }
+.nav-btn {
+  padding: 8px 10px;
+  background: none; border:none;
+  cursor: pointer;
+  color: var(--dark-sub);
+  display: flex; align-items:center; gap:5px;
+  transition: color .15s;
+  position: relative;
+}
+.nav-btn:hover { color: var(--dark-fg) }
+.nav-btn svg { width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round }
+.cart-count {
+  background: var(--gold);
+  color: var(--dark);
+  font-size: 9px; font-weight:700;
+  min-width:16px; height:16px;
+  border-radius: 50%;
+  display: flex; align-items:center; justify-content:center;
+  letter-spacing: 0;
+  position:absolute; top:2px; right:2px;
+}
+@media (max-width:700px) {
+  .nav-main { display:none }
+  .nb-hide  { display:none }
+}
+
+/* ── BREADCRUMB ───────────────────────────────────────────────────────────── */
+.breadcrumb {
+  max-width: var(--w);
+  margin: 0 auto;
+  padding: 13px var(--gx);
+  font-size: 11px;
+  color: var(--fg-soft);
+  letter-spacing: .03em;
+  display: flex; gap: 5px; align-items: center;
+}
+.breadcrumb a:hover { color:var(--fg) }
+.bc-sep { opacity:.35 }
+
+/* ── PAGE HERO ────────────────────────────────────────────────────────────── */
+.page-hero {
+  text-align: center;
+  padding: 2.25rem var(--gx) 2.5rem;
+}
+.page-hero h1 {
+  font-family: var(--f-disp);
+  font-size: clamp(28px, 5vw, 56px);
+  font-weight: 300;
+  letter-spacing: .07em;
+  text-wrap: balance;
+  line-height: 1.1;
+}
+
+/* ── FILTER RAIL ──────────────────────────────────────────────────────────── */
+.filter-rail {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.filter-rail::-webkit-scrollbar { display:none }
+.filter-rail-inner {
+  max-width: var(--w);
+  margin: 0 auto;
+  padding: 0 var(--gx);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: max-content;
+}
+.filter-btns { display:flex }
+.filter-btn {
+  display: flex; align-items:center; gap:7px;
+  padding: 15px 18px;
+  font-family: var(--f-ui);
+  font-size: 11px; font-weight:500;
+  letter-spacing: .07em; text-transform:uppercase;
+  color: var(--fg);
+  background:none; border:none;
+  border-right: 1px solid var(--border);
+  cursor:pointer; white-space:nowrap;
+  transition: background .15s;
+}
+.filter-btn:first-child { padding-left:0 }
+.filter-btn:hover { background: var(--surface) }
+.chev {
+  display:inline-block;
+  width:7px; height:7px;
+  border-right: 1.5px solid var(--fg-soft);
+  border-bottom: 1.5px solid var(--fg-soft);
+  transform: rotate(45deg) translate(-1px,-1px);
+  margin-top:-3px; flex-shrink:0;
+}
+
+.filter-sort {
+  display:flex; align-items:center; gap:8px;
+  padding: 15px 0 15px 18px;
+  border-left: 1px solid var(--border);
+  flex-shrink:0;
+}
+.filter-sort span { font-size:11px; color:var(--fg-mid); letter-spacing:.05em; text-transform:uppercase; white-space:nowrap }
+.sort-sel {
+  font-family:var(--f-ui); font-size:11px;
+  background:none; border:none; color:var(--fg);
+  cursor:pointer; letter-spacing:.03em; padding:2px 4px;
+}
+.sort-ico { font-size:15px; color:var(--fg-soft) }
+
+/* ── PRODUCT GRID ─────────────────────────────────────────────────────────── */
+.catalog {
+  max-width: var(--w);
+  margin: 0 auto;
+  padding: 3px var(--gx) 0;
+}
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+}
+@media (max-width:960px)  { .product-grid { grid-template-columns:repeat(3,1fr) } }
+@media (max-width:600px)  { .product-grid { grid-template-columns:repeat(2,1fr); gap:1px } .catalog { padding-inline: max(8px,env(safe-area-inset-left,0px)) } }
+
+/* card */
+.pcard { position:relative; background:var(--bg); cursor:pointer }
+
+.pcard-photo {
+  aspect-ratio: 3/4;
+  overflow:hidden; position:relative;
+}
+.pcard-inner {
+  width:100%; height:100%;
+  overflow:hidden;
+}
+.pcard-img {
+  width:100%; height:100%;
+  object-fit: cover;
+  object-position: center top;
+  display:block;
+  transition: transform .42s cubic-bezier(.25,.46,.45,.94);
+}
+.pcard:hover .pcard-img { transform:scale(1.05) }
+
+.pcard-badge {
+  position:absolute; top:10px; left:10px;
+  background:var(--gold); color:#fff;
+  font-size:9px; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+  padding:3px 9px;
+}
+
+.pcard-info { padding:12px 2px 24px }
+.pcard-name { font-size:13px; color:var(--fg); line-height:1.35; margin-bottom:6px }
+.pcard-prices { display:flex; align-items:baseline; gap:7px; margin-bottom:3px }
+.price-old { font-size:11px; color:var(--fg-soft); text-decoration:line-through }
+.price-now { font-size:14px; font-weight:500; color:var(--fg); font-variant-numeric:tabular-nums }
+.pcard-parcela { font-size:11px; color:var(--fg-mid) }
+
+/* ── PAGINATION ───────────────────────────────────────────────────────────── */
+.pagination {
+  display:flex; justify-content:center; align-items:center; gap:2px;
+  padding: 2.5rem 1rem 3.5rem;
+  max-width:var(--w); margin:0 auto;
+}
+.pnum {
+  width:38px; height:38px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px; color:var(--fg-mid);
+  background:none; border:1px solid transparent;
+  cursor:pointer; font-family:var(--f-ui);
+  transition:border-color .15s,color .15s;
+  font-variant-numeric:tabular-nums;
+}
+.pnum:hover { border-color:var(--border); color:var(--fg) }
+.pnum.on { border-color:var(--fg); color:var(--fg); font-weight:600 }
+.pnum.arr { font-size:16px; opacity:.35 }
+
+/* ── CONTENT CAROUSEL ─────────────────────────────────────────────────────── */
+.content-strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 2.5rem 0;
+}
+.car-wrap {
+  max-width: var(--w);
+  margin: 0 auto;
+  padding: 0 var(--gx);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.car-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.car-label {
+  font-size: 10px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--fg-soft);
+  font-weight: 600;
+}
+.car-arrows { display: flex; gap: 6px }
+.car-arr {
+  width: 34px; height: 34px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--fg);
+  font-size: 18px; line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s;
+  flex-shrink: 0;
+}
+.car-arr:hover:not(:disabled) { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.car-arr:disabled { opacity: .25; cursor: default }
+
+.car-viewport { overflow: hidden }
+.car-track {
+  display: flex;
+  gap: 2px;
+  transition: transform .38s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+.car-slide {
+  flex: 0 0 calc(50% - 1px);
+  min-width: 0;
+  padding: .25rem 2rem .25rem 0;
+  border-right: 1px solid var(--border);
+}
+.car-slide:last-child { border-right: none }
+.car-slide h2 {
+  font-family: var(--f-disp);
+  font-size: clamp(15px, 1.6vw, 20px);
+  font-weight: 400;
+  letter-spacing: .02em;
+  text-wrap: balance;
+  margin-bottom: .6rem;
+  line-height: 1.2;
+}
+.car-slide p { font-size: 12.5px; color: var(--fg-mid); line-height: 1.85 }
+
+.car-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.car-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: background .2s, width .2s;
+  flex-shrink: 0;
+}
+.car-dot.on { background: var(--fg); width: 18px; border-radius: 3px }
+
+@media (max-width: 640px) {
+  .car-slide { flex: 0 0 100%; padding-right: 0; border-right: none }
+}
+
+/* ── NEWSLETTER ───────────────────────────────────────────────────────────── */
+.nl-section {
+  background:var(--dark);
+  color:var(--dark-fg);
+  padding: 5.5rem var(--gx);
+  position:relative; overflow:hidden;
+}
+.nl-section::before {
+  content:'';
+  position:absolute; inset:0;
+  background: radial-gradient(ellipse 55% 75% at 75% 50%, rgba(201,150,58,.06) 0%, transparent 65%);
+  pointer-events:none;
+}
+.nl-inner {
+  max-width:var(--w); margin:0 auto;
+  display:grid; grid-template-columns:1fr 1.15fr;
+  gap:5rem; align-items:center; position:relative;
+}
+@media (max-width:700px) { .nl-inner { grid-template-columns:1fr } .nl-section { padding:3.5rem var(--gx) } }
+
+.nl-copy h2 {
+  font-family:var(--f-disp);
+  font-size:clamp(28px,4.5vw,56px);
+  font-weight:300; line-height:1.1; letter-spacing:.03em; margin-bottom:1rem;
+}
+.nl-copy h2 em { font-style:italic; color:var(--gold) }
+.nl-copy p { font-size:13px; color:var(--dark-sub); line-height:1.8 }
+
+.nl-form-wrap { display:flex; flex-direction:column; gap:1.25rem }
+.nl-form-wrap p { font-size:12px; color:var(--dark-sub); line-height:1.75 }
+.nl-form { display:flex; flex-direction:column; gap:.75rem; max-width:440px }
+.nl-input {
+  width:100%;
+  padding:13px 16px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--dark-fg); font-family:var(--f-ui); font-size:13px; letter-spacing:.02em;
+}
+.nl-input::placeholder { color:rgba(237,232,224,.28) }
+.nl-input:focus { outline:none; border-color:rgba(201,150,58,.5) }
+.nl-submit {
+  padding:13px 22px; align-self:flex-end;
+  background:transparent; color:var(--dark-fg);
+  border:1px solid rgba(255,255,255,.25);
+  font-family:var(--f-ui); font-size:10px; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase;
+  cursor:pointer; white-space:nowrap;
+  transition:background .15s,border-color .15s,color .15s;
+}
+.nl-submit:hover { background:var(--gold); border-color:var(--gold); color:#fff }
+
+/* ── FOOTER ───────────────────────────────────────────────────────────────── */
+.site-footer {
+  background:var(--dark-2);
+  color:var(--dark-sub);
+  border-top:1px solid rgba(255,255,255,.04);
+  padding: 3.5rem var(--gx) 2rem;
+}
+.footer-logo-row {
+  max-width:var(--w); margin:0 auto 2.5rem;
+  display:flex; align-items:center; gap:1rem; padding-bottom:2.5rem;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.footer-logo-row img { height:38px; width:38px; object-fit:cover }
+.footer-logo-name {
+  font-family:var(--f-disp); font-size:19px; font-weight:400;
+  letter-spacing:.24em; text-transform:uppercase;
+  color:var(--gold); padding-left:.24em; line-height:1;
+}
+.footer-logo-tagline {
+  margin-left:auto;
+  font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--dark-sub); font-style:italic; font-family:var(--f-disp);
+}
+
+.footer-grid {
+  max-width:var(--w); margin:0 auto 2.5rem;
+  display:grid; grid-template-columns:repeat(4,1fr); gap:2rem;
+}
+@media (max-width:700px) { .footer-grid { grid-template-columns:repeat(2,1fr) } }
+
+.fcol h5 {
+  font-size:10px; letter-spacing:.13em; text-transform:uppercase;
+  font-weight:700; color:var(--dark-fg); margin-bottom:1.1rem;
+}
+.fcol ul { list-style:none }
+.fcol li+li { margin-top:.55rem }
+.fcol a { font-size:12px; color:var(--dark-sub); transition:color .15s; line-height:1.4 }
+.fcol a:hover { color:var(--dark-fg) }
+
+.social-row { display:flex; gap:8px; margin-top:1.25rem }
+.sico {
+  width:30px; height:30px;
+  border:1px solid rgba(255,255,255,.1);
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700;
+  color:var(--dark-sub); text-decoration:none;
+  transition:border-color .15s,color .15s;
+}
+.sico:hover { border-color:var(--gold); color:var(--gold) }
+
+.footer-bottom {
+  border-top:1px solid rgba(255,255,255,.04);
+  padding-top:1.5rem;
+  max-width:var(--w); margin:0 auto;
+  display:flex; justify-content:space-between; align-items:center;
+  gap:1rem; flex-wrap:wrap;
+  font-size:11px; color:rgba(237,232,224,.28);
+}
+.pay-row { display:flex; gap:5px; align-items:center }
+.pay-tag {
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  padding:2px 7px;
+  font-size:9px; font-weight:700; letter-spacing:.05em;
+  color:rgba(237,232,224,.35); border-radius:2px;
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOP STRIP ── -->
+<div class="top-strip">
+  <div class="ts-promo">
+    <span>Frete grátis acima de <strong>R$&nbsp;399</strong></span>
+    <span class="sep">·</span>
+    <span class="gold">10% OFF no PIX</span>
+    <span class="sep">·</span>
+    <span>Parcelamento em até 10× sem juros</span>
+  </div>
+  <div class="ts-links">
+    <a href="#">WhatsApp</a>
+    <a href="#">Nossas Lojas</a>
+    <a href="#">Rastrear Pedido</a>
+    <a href="#">Trocas e Devoluções</a>
+  </div>
+</div>
+
+<!-- ── HEADER ── -->
+<header class="header-wrap">
+  <div class="header-inner">
+    <nav class="nav-main">
+      <a href="#">Comprar</a>
+      <a href="#" class="active">Alfaiataria</a>
+      <a href="#">Novidades</a>
+      <a href="#">Promoções</a>
+    </nav>
+
+    <a class="brand-logo" href="#">
+      <img src="img/743496928_18604728859012551_6461541229362664800_n.jpg" alt="UseMacedo">
+      <span class="brand-name">UseMacedo</span>
+    </a>
+
+    <div class="nav-actions">
+      <button class="nav-btn nb-hide" aria-label="Buscar">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+      </button>
+      <button class="nav-btn nb-hide" aria-label="Minha Conta">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </button>
+      <button class="nav-btn" aria-label="Sacola">
+        <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ── BREADCRUMB ── -->
+<nav class="breadcrumb" aria-label="Navegação estrutural">
+  <a href="#">Início</a>
+  <span class="bc-sep">›</span>
+  <span>Alfaiataria Masculina</span>
+</nav>
+
+<!-- ── PAGE TITLE ── -->
+<div class="page-hero">
+  <h1>Alfaiataria Masculina</h1>
+</div>
+
+<!-- ── FILTER RAIL ── -->
+<div class="filter-rail">
+  <div class="filter-rail-inner">
+    <div class="filter-btns">
+      <button class="filter-btn">Cor <span class="chev"></span></button>
+      <button class="filter-btn">Matéria-Prima <span class="chev"></span></button>
+      <button class="filter-btn">Tamanho <span class="chev"></span></button>
+      <button class="filter-btn">Categoria <span class="chev"></span></button>
+      <button class="filter-btn">Preço <span class="chev"></span></button>
+    </div>
+    <div class="filter-sort">
+      <span>Ordenar por</span>
+      <select class="sort-sel" aria-label="Ordenar produtos">
+        <option>Relevância</option>
+        <option>Menor Preço</option>
+        <option>Maior Preço</option>
+        <option>Novidades</option>
+        <option>Mais Vendidos</option>
+      </select>
+      <span class="sort-ico" aria-hidden="true">⇅</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── PRODUCT GRID ── -->
+<div class="catalog">
+  <div class="product-grid" id="grid"></div>
+</div>
+
+<!-- ── PAGINATION ── -->
+<div class="pagination" role="navigation" aria-label="Páginas">
+  <button class="pnum arr" aria-label="Página anterior">‹</button>
+  <button class="pnum on">1</button>
+  <button class="pnum">2</button>
+  <button class="pnum">3</button>
+  <button class="pnum arr" aria-label="Próxima página">›</button>
+</div>
+
+<!-- ── CONTENT CAROUSEL ── -->
+<div class="content-strip">
+  <div class="car-wrap">
+    <div class="car-header">
+      <span class="car-label">Sobre Alfaiataria</span>
+      <div class="car-arrows">
+        <button class="car-arr" id="carPrev" aria-label="Anterior">‹</button>
+        <button class="car-arr" id="carNext" aria-label="Próximo">›</button>
+      </div>
+    </div>
+    <div class="car-viewport">
+      <div class="car-track" id="carTrack">
+        <div class="car-slide">
+          <h2>Alfaiataria e Roupas Sociais</h2>
+          <p>A alfaiataria masculina é a base de um guarda-roupa executivo bem construído. Na UseMacedo você encontra roupas sociais que unem caimento preciso, tecidos de qualidade e versatilidade real — do ambiente corporativo a ocasiões especiais.</p>
+        </div>
+        <div class="car-slide">
+          <h2>Ternos e Costumes Masculinos</h2>
+          <p>O terno é composto por paletó, colete e calça no mesmo tecido — o traje mais formal da alfaiataria clássica. O costume reúne paletó e calça, sendo igualmente elegante e mais versátil. Disponíveis nos cortes slim, super slim e tradicional.</p>
+        </div>
+        <div class="car-slide">
+          <h2>Paletó e Blazer Social</h2>
+          <p>O paletó ancora qualquer composição de alfaiataria. Na UseMacedo os modelos aliam estrutura, respirabilidade e resistência ao amassado. Com camisa social, o resultado é formal e alinhado. Com camiseta, o paletó assume caráter urbano sem perder sofisticação.</p>
+        </div>
+        <div class="car-slide">
+          <h2>Calça de Alfaiataria</h2>
+          <p>Uma das peças mais versáteis do guarda-roupa masculino. Funciona compondo costume completo ou combinada com camiseta e tênis. Disponível em poliviscose, algodão com elastano e poliamida, nos cortes slim e super slim, nas cores preto, cinza, cáqui e marinho.</p>
+        </div>
+        <div class="car-slide">
+          <h2>O que é alfaiataria masculina?</h2>
+          <p>Conjunto de peças desenvolvidas com técnicas específicas de corte, costura e acabamento para garantir caimento preciso ao corpo. Na UseMacedo combinamos esses princípios tradicionais com tecidos de alta performance para uso corporativo e social.</p>
+        </div>
+        <div class="car-slide">
+          <h2>Slim vs. Tradicional Fit</h2>
+          <p>O slim tem corte mais ajustado, ombros estruturados e jaqueta mais curta — ideal para silhuetas esbeltas e ambientes corporativos modernos. O tradicional oferece mais espaço no tronco e nas pernas, com maior mobilidade para uso prolongado.</p>
+        </div>
+        <div class="car-slide">
+          <h2>Gravatas e Acessórios</h2>
+          <p>A gravata fecha e eleva qualquer composição de alfaiataria. Lenços de bolso, abotoaduras e cintos em couro completam a elegância do traje social. A escolha de cada item deve considerar a proporção e o nível de formalidade da ocasião.</p>
+        </div>
+        <div class="car-slide">
+          <h2>Peças Essenciais</h2>
+          <p>Comece por uma calça social em cor neutra, um paletó ou costume que combine e uma camisa social bem ajustada. A gravata entra para elevar a formalidade quando necessário. Com essas peças escolhidas e bem ajustadas ao corpo, você cobre qualquer ocasião.</p>
+        </div>
+      </div>
+    </div>
+    <div class="car-dots" id="carDots"></div>
+  </div>
+</div>
+
+<!-- ── NEWSLETTER ── -->
+<section class="nl-section">
+  <div class="nl-inner">
+    <div class="nl-copy">
+      <h2>Continue essa<br><em>conversa.</em></h2>
+      <p>Receba em primeira mão nossas novas peças, conteúdos exclusivos e inspirações que acompanham o seu estilo de vida.</p>
+    </div>
+    <div class="nl-form-wrap">
+      <p>Inscreva-se e ganhe 10% de desconto na sua primeira compra. Prometemos respeitar o seu espaço na caixa de entrada — apenas o que realmente importa.</p>
+      <form class="nl-form" id="nlForm" novalidate>
+        <input class="nl-input" type="text"  placeholder="Digite seu nome"    autocomplete="name">
+        <input class="nl-input" type="tel"   placeholder="Digite seu celular" autocomplete="tel">
+        <input class="nl-input" type="email" placeholder="Insira seu e-mail"  autocomplete="email" id="nlEmail" required>
+        <button class="nl-submit" type="submit" id="nlBtn">Enviar</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="footer-logo-row">
+    <img src="img/743496928_18604728859012551_6461541229362664800_n.jpg" alt="UseMacedo">
+    <span class="footer-logo-name">UseMacedo</span>
+    <span class="footer-logo-tagline">Alfaiataria Masculina de Excelência</span>
+  </div>
+
+  <div class="footer-grid">
+    <div class="fcol">
+      <h5>Empresa</h5>
+      <ul>
+        <li><a href="#">Sobre nós</a></li>
+        <li><a href="#">Nossa História</a></li>
+        <li><a href="#">Sustentabilidade</a></li>
+        <li><a href="#">Trabalhe Conosco</a></li>
+        <li><a href="#">Nossas Lojas</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h5>Suporte</h5>
+      <ul>
+        <li><a href="#">Entre em Contato</a></li>
+        <li><a href="#">Trocas e Devoluções</a></li>
+        <li><a href="#">Rastrear Pedido</a></li>
+        <li><a href="#">Tamanhos e Medidas</a></li>
+        <li><a href="#">Perguntas Frequentes</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h5>Políticas</h5>
+      <ul>
+        <li><a href="#">Política de Privacidade</a></li>
+        <li><a href="#">Termos de Uso</a></li>
+        <li><a href="#">Política de Entrega</a></li>
+        <li><a href="#">Regulamento de Cupons</a></li>
+        <li><a href="#">Programa Fidelidade</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h5>UseMacedo</h5>
+      <p style="font-size:12px;line-height:1.75;margin-bottom:.85rem;color:var(--dark-sub)">Alfaiataria masculina com tradição, precisão e estilo. Atendemos todo o Brasil com frete expresso.</p>
+      <div class="social-row">
+        <a class="sico" href="#" aria-label="Instagram">In</a>
+        <a class="sico" href="#" aria-label="Facebook">Fb</a>
+        <a class="sico" href="#" aria-label="WhatsApp">Wa</a>
+        <a class="sico" href="#" aria-label="YouTube">Yt</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2025 UseMacedo — Todos os direitos reservados</span>
+    <div class="pay-row">
+      <span class="pay-tag">VISA</span>
+      <span class="pay-tag">MASTER</span>
+      <span class="pay-tag">PIX</span>
+      <span class="pay-tag">AMEX</span>
+      <span class="pay-tag">ELO</span>
+      <span class="pay-tag">BOLETO</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── product data ── */
+  const IMG = {
+    paleto:  'img/261228-1920-2627.webp',
+    calcaPreta: 'img/18121608_09_1-CALCA-SLIM-ALFAIATARIA-MLT.webp',
+    calcaAzul:  'img/444235-1920-2627.webp',
+    calcaDupla: 'img/6100iolfRIL.webp',
+    calcaVerde: 'img/calca-de-alfaiataria-masculina_600x600.webp',
+  };
+  const products = [
+    { name:'Terno Slim Azul Marinho — Lã Penteada',   img:IMG.paleto,     price:'R$ 1.099,90', tag:'NOVO' },
+    { name:'Calça de Alfaiataria Preta Super Slim',    img:IMG.calcaPreta, price:'R$ 259,90', old:'R$ 319,90' },
+    { name:'Paletó Cinza Médio Slim',                  img:IMG.paleto,     price:'R$ 699,90' },
+    { name:'Costume Preto Slim — Poliviscose',          img:IMG.paleto,     price:'R$ 899,90', old:'R$ 1.049,90' },
+    { name:'Terno Cinza Chumbo Tradicional Fit',       img:IMG.paleto,     price:'R$ 1.249,90' },
+    { name:'Calça de Alfaiataria Grafite Slim',        img:IMG.calcaDupla, price:'R$ 279,90' },
+    { name:'Paletó Azul Marinho Premium',              img:IMG.paleto,     price:'R$ 749,90', tag:'NOVO' },
+    { name:'Costume Marinho + Colete — Slim',          img:IMG.paleto,     price:'R$ 1.349,90' },
+    { name:'Paletó Tweed Mescla Cinza',                img:IMG.paleto,     price:'R$ 779,90', old:'R$ 899,90' },
+    { name:'Terno Bege Natural — Linho Premium',       img:IMG.paleto,     price:'R$ 1.149,90', tag:'NOVO' },
+    { name:'Calça de Alfaiataria Caramelo Slim',       img:IMG.calcaVerde, price:'R$ 269,90' },
+    { name:'Costume Cinza Claro + Colete Slim',        img:IMG.paleto,     price:'R$ 1.299,90' },
+    { name:'Paletó Preto Premium — Slim Fit',          img:IMG.paleto,     price:'R$ 729,90', old:'R$ 849,90' },
+    { name:'Calça Alfaiataria Azul Marinho Slim',      img:IMG.calcaAzul,  price:'R$ 259,90' },
+    { name:'Terno Azul Royal — Lã Penteada',           img:IMG.paleto,     price:'R$ 1.199,90' },
+    { name:'Paletó Risca de Giz Cinza Médio',          img:IMG.paleto,     price:'R$ 819,90', old:'R$ 949,90' },
+  ];
+
+  /* ── render grid ── */
+  const grid = document.getElementById('grid');
+  function parcela(priceStr) {
+    const val = parseFloat(priceStr.replace('R$ ','').replace('.','').replace(',','.'));
+    const x10 = (val / 10).toFixed(2).replace('.',',');
+    return `10x de R$&nbsp;${x10} sem juros`;
+  }
+
+  grid.innerHTML = products.map((p) => `
+    <article class="pcard" tabindex="0" aria-label="${p.name}">
+      <div class="pcard-photo">
+        <div class="pcard-inner">
+          <img class="pcard-img" src="${p.img}" alt="${p.name}" loading="lazy">
+        </div>
+        ${p.tag ? `<span class="pcard-badge">${p.tag}</span>` : ''}
+      </div>
+      <div class="pcard-info">
+        <div class="pcard-name">${p.name}</div>
+        <div class="pcard-prices">
+          ${p.old ? `<span class="price-old">${p.old}</span>` : ''}
+          <span class="price-now">${p.price}</span>
+        </div>
+        <div class="pcard-parcela">${parcela(p.price)}</div>
+      </div>
+    </article>
+  `).join('');
+
+  /* ── pagination ── */
+  document.querySelectorAll('.pnum:not(.arr)').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.pnum.on').forEach(b => b.classList.remove('on'));
+      this.classList.add('on');
+    });
+  });
+
+  /* ── content carousel ── */
+  (function () {
+    const track  = document.getElementById('carTrack');
+    const dotsEl = document.getElementById('carDots');
+    const prev   = document.getElementById('carPrev');
+    const next   = document.getElementById('carNext');
+    const slides = track.querySelectorAll('.car-slide');
+    const total  = slides.length;
+
+    function perView() { return window.innerWidth <= 640 ? 1 : 2 }
+
+    let cur = 0;
+
+    function pages() { return Math.ceil(total / perView()) }
+    function clamp(n) { return Math.max(0, Math.min(n, pages() - 1)) }
+
+    function render(page) {
+      cur = clamp(page);
+      const pv = perView();
+      const pct = (100 / pv) * cur;
+      track.style.transform = `translateX(-${pct}%)`;
+      prev.disabled = cur === 0;
+      next.disabled = cur >= pages() - 1;
+      dotsEl.querySelectorAll('.car-dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+    }
+
+    function buildDots() {
+      dotsEl.innerHTML = '';
+      for (let i = 0; i < pages(); i++) {
+        const d = document.createElement('button');
+        d.className = 'car-dot' + (i === 0 ? ' on' : '');
+        d.setAttribute('aria-label', 'Slide ' + (i + 1));
+        d.addEventListener('click', () => render(i));
+        dotsEl.appendChild(d);
+      }
+    }
+
+    prev.addEventListener('click', () => render(cur - 1));
+    next.addEventListener('click', () => render(cur + 1));
+
+    buildDots();
+    render(0);
+
+    let rto;
+    window.addEventListener('resize', () => {
+      clearTimeout(rto);
+      rto = setTimeout(() => { buildDots(); render(Math.min(cur, pages() - 1)) }, 120);
+    });
+  })();
+
+  /* ── newsletter ── */
+  document.getElementById('nlForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const btn   = document.getElementById('nlBtn');
+    const input = document.getElementById('nlEmail');
+    if (!input.value) { input.focus(); return; }
+    btn.textContent = 'Inscrito! ✓';
+    btn.style.background = '#4a7a4a';
+    btn.style.borderColor = '#4a7a4a';
+    input.value = '';
+    setTimeout(() => {
+      btn.textContent = 'Inscrever-se';
+      btn.style.background = '';
+      btn.style.borderColor = '';
+    }, 4000);
+  });
+})();
+</script>
+
+</body>
+</html>
